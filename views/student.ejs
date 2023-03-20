@@ -1,0 +1,260 @@
+    <br>
+    <div class="container">
+        <h1 class="m-3 text-center listMhs">LIST MAHASISWA</h1>
+
+       
+
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <i class="bi bi-plus-circle"></i> Add
+                </button>
+                
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Add Mahasiswa</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <!--modal body awal-->
+                        <div class="modal-body"> 
+                            
+                             <form action="/student" method="post">
+                                <label for="nama">Nama</label>
+                                <br>
+                                <input type="text" id="nama" name="nama" required>
+
+                                <label for="nim" class="mt-3">NIM</label>
+                                <br>
+                                <input type="tel" id="nim" name="nim" minlength="10" maxlength="10" required>
+                                <br>
+                                <label for="email" class="mt-3">Email</label>
+                                <br>
+                                <input type="email" id="email" name="email" required>
+                                <br>
+                                <label for="fakultas" class="mt-3">Fakultas</label>
+                                <br>
+                                <input type="text" id="fakultas" name="fakultas" required>
+                                <br>
+                                <label for="prodi" class="mt-3">Prodi</label>
+                                <br>
+                                <input type="text" id="prodi" name="prodi" required>
+                                <div class="d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-primary mt-3">Tambah Data😝</button>
+                                </div>
+                             </form>
+
+                             
+
+                        </div>
+                        <!--modal body akhir-->
+                        
+                    </div>
+                    </div>
+                </div>
+        
+        
+
+        
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped">
+                    
+                    <% if (mahasiswa) { %>
+                        <% if (mahasiswa.length === 0) { %>
+                            <div class="alert alert-danger mt-2" role="alert">
+                                <strong>Data Doesn't Exist!</strong>
+                            </div>
+                        <% } else { %>
+                         <% if (msg.length !== 0) { %>
+                               <div class="alert alert-success mt-2" role="alert">
+                                   <strong><%= msg %> </strong>
+                               </div>
+                         <% } %>
+                        <% } %>
+                    <% } %>
+                    
+
+                    
+
+                    <% if (typeof errors != "undefined") { %>
+                        <br>
+                        <div class="alert alert-danger alert-dismissible fade show p-0" role="alert">
+                        <ul class="notifError">
+                            <% errors.forEach(err => { %>
+                                <li class="p-1 mt-1"><strong><i class="bi bi-exclamation-triangle"></i><%= err.msg %> </strong></li>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <% }) %>
+                         </ul>
+                        </div>
+                        <% } %>
+                       
+                    
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-center">No</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">NIM</th>
+                            <th scope="col" class="text-center">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                            <% mahasiswa.forEach((mhs, i) => { %>
+                            <tr>
+                            <th scope="row" class="text-center"><%= i + 1 %> </th>
+                            <td class="col-nama"><%= mhs.nama %> </td>
+                            <td><%= mhs.nim %></td>
+                            
+                            <!-- Button trigger modal -->
+                            <td class="text-center">
+                                <button type="button" class="btn btn-primary badge rounded-pill" data-bs-toggle="modal" data-bs-target="#staticBackdrop<%= mhs.nim %>">
+                                    <i class="bi bi-info-circle"></i> Detail
+                                </button>
+
+                                <button class="btn btn-success badge rounded-pill" data-bs-toggle="modal" data-bs-target="#modalEdit<%= mhs.nim %>"><i class="bi bi-pencil-square"></i> Update</button>
+
+                                <!-- Modal Edit -->
+                                <div class="modal fade text-start" id="modalEdit<%= mhs.nim %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="modalEditLabel">Update Mahasiswa</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <!--modal body awal-->
+                                        <div class="modal-body"> 
+                                            
+                                            <form action="/student?_method=PUT" method="POST">
+                                                <input type="hidden" name="_id" value="<%= mhs._id %>">
+
+                                                <input type="hidden" name="oldName" value="<%= mhs.nama %>">
+                                                <label for="nama">Nama</label>
+                                                <br>
+                                                <input type="text" id="nama" name="nama" value="<%= mhs.nama %>" required>
+
+                                                <input type="hidden" name="oldNim" value="<%= mhs.nim %>">
+                                                <label for="nim" class="mt-3">NIM</label>
+                                                <br>
+                                                <input type="tel" id="nim" name="nim" minlength="10" maxlength="10" value="<%= mhs.nim %>" required>
+                                                <br>
+
+                                                <input type="hidden" name="oldEmail" value="<%= mhs.email %>">
+                                                <label for="email" class="mt-3">Email</label>
+                                                <br>
+                                                <input type="email" id="email" name="email" value="<%= mhs.email %>" required>
+                                                <br>
+
+                                                <label for="fakultas" class="mt-3">Fakultas</label>
+                                                <br>
+                                                <input type="text" id="fakultas" name="fakultas" value="<%= mhs.fakultas %>" required>
+                                                <br>
+                                                <label for="prodi" class="mt-3">Prodi</label>
+                                                <br>
+                                                <input type="text" id="prodi" name="prodi" value="<%= mhs.prodi %>" required>
+                                                <div class="d-flex justify-content-end">
+                                                
+                                                <button type="submit" class="btn btn-primary mt-3">Update Data😉</button>
+                                                </div>
+                                            </form>
+
+                                            
+
+                                        </div>
+                                        <!--modal body edit akhir-->
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- modal edit akhir -->
+
+                                <button class="btn btn-danger badge rounded-pill" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal<%= mhs.nim %>"><i class="bi bi-trash3"></i> Delete</button>
+                            </td>
+
+                            <!-- Modal Delete awal -->
+                            <div class="modal fade" id="exampleModal<%= mhs.nim %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel"><i class="bi bi-exclamation-triangle-fill"></i> WARNING</h1>
+                                    </div>
+                                    <div class="modal-body">
+                                    Are You Sure To Delete It?
+
+                                    <div class="tombol mt-2 d-flex justify-content-end">
+                                        <button type="button" class="btn btn-secondary me-3" data-bs-dismiss="modal">Close</button>
+                                        <!-- <a href="/student/<%= mhs.nama%>" class="btn btn-danger btn-del">Delete😣</a> -->
+                                        <form action="/student?_method=DELETE" method="POST" class="d-inline">
+                                            <input type="hidden" name="nama" value="<%= mhs.nama %>">
+                                            <button type="submit" class="btn btn-danger btn-del">Delete😣</button>
+                                        </form>
+                                    </div>
+                                    </div>
+                                   
+                                </div>
+                                </div>
+                            </div>
+                            <!-- Modal Delete akhir -->
+
+                            <!-- Modal Detail -->
+                            <div class="modal fade" id="staticBackdrop<%= mhs.nim %>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Detail Mahasiswa</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                    <ol>
+                                        <li>Nama : <%= mhs.nama %> </li>
+                                        <li>NIM : <%= mhs.nim %> </li>
+                                        <li>Email : <%= mhs.email %> </li>
+                                        <li>Fakultas : <%= mhs.fakultas %> </li>
+                                        <li>Prodi : <%= mhs.prodi %> </li>
+                                    </ol>
+                                    </div>
+                                    
+                                </div>
+                                </div>
+                            </div>
+                            </tr>
+                            
+                           
+                            <% }) %>
+                            
+                            
+                        
+
+                            
+                        
+                    </tbody>
+                  </table>
+            </div>
+        </div>
+
+
+
+
+
+        <!-- add awal -->
+        
+        <!-- add akhir -->
+
+
+
+
+    </div>
+    
+    <!-- <form class="row g-3">
+        <div class="col-auto">
+            <label for="exampleFormControlInput1" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+        <div class="col-auto">
+            <label for="exampleFormControlInput1" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+        <div class="col-auto">
+            <label for="exampleFormControlInput1" class="form-label">Email address</label>
+            <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+            
+        </div>
+    </form> -->
